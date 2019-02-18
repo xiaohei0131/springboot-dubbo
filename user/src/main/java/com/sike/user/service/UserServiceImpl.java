@@ -17,11 +17,14 @@ import com.sike.user.dao.UserDao;
 import com.sike.utils.KeyGenerator;
 import com.sike.utils.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Service(version = "1.0.0",loadbalance = "")
-@org.springframework.stereotype.Service
+@Service(version = "1.0.0")
+@Component
+@Transactional
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
@@ -104,6 +107,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public PageResult queryUsers(UserPageReq userPageReq) {
         PageHelper.startPage(userPageReq.getPageNum(), userPageReq.getPageSize());
         List<UserEntity> users = userDao.findUsers(userPageReq);

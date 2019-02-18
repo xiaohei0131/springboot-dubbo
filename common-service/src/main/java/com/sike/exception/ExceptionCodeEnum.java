@@ -18,6 +18,7 @@ public enum ExceptionCodeEnum implements Serializable {
     ERROR_404(ComExpPrefix + "001", "没有该接口"),
     PARAM_NULL(ComExpPrefix + "002", "参数为空"),
     NO_REPEAT(ComExpPrefix + "003", "请勿重复提交"),
+    SESSION_NO_STORE(ComExpPrefix + "004", "session存储失败"),
 
     /** User模块异常 */
     USERNAME_NULL(UserExpPrefix + "000", "用户名为空"),
