@@ -1,6 +1,7 @@
 package com.sike.service.redis;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -56,4 +57,12 @@ public interface RedisService {
      * @return
      */
     boolean set(final String key, Serializable value, Long expireTime);
+
+    /**
+     * 添加 LeftPush List（使用默认失效时间）
+     * @param key
+     * @param value
+     * @return
+     */
+    Long leftPush(final String key, Collection value);
 }

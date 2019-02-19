@@ -8,6 +8,7 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -77,5 +78,10 @@ public class RedisServiceImpl implements RedisService {
             e.printStackTrace();
         }
         return result;
+    }
+
+    @Override
+    public Long leftPush(String key, Collection value) {
+        return redisTemplate.opsForList().leftPushAll(key,value);
     }
 }

@@ -13,6 +13,7 @@
         <module>user</module>
         <module>controller</module>
         <module>redis</module>
+        <module>permission</module>
     </modules>
 
     <parent>

@@ -2,14 +2,13 @@ package com.sike.controller.user;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.sike.entity.user.UserEntity;
+import com.sike.permission.annotation.Permission;
 import com.sike.request.user.LoginReq;
 import com.sike.request.user.RegisterReq;
 import com.sike.request.user.UserPageReq;
 import com.sike.response.PageResult;
 import com.sike.response.Result;
-import com.sike.service.redis.RedisService;
 import com.sike.service.user.UserService;
-import com.sike.utils.KeyGenerator;
 import com.sike.utils.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
@@ -43,7 +41,7 @@ public class UserController {
     @PostMapping("/login")
     public Result login(LoginReq loginReq, HttpServletResponse httpRsp) {
         UserEntity userEntity = userService.login(loginReq);
-        sessionUtil.setSession(httpRsp,userEntity);
+        sessionUtil.setSession(httpRsp, userEntity);
         return Result.success();
     }
 
@@ -55,10 +53,12 @@ public class UserController {
 
     /**
      * 退出登录（移除缓存session）
+     *
      * @param httpReq
      * @return
      */
     @PostMapping("/logout")
+    @Permission(code = "user.logout", name = "退出登录")
     public Result logout(HttpServletRequest httpReq) {
         sessionUtil.removeSession(httpReq);
         return Result.success();
