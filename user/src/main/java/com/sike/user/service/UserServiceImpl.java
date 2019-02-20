@@ -5,6 +5,7 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.sike.bean.user.UserQuery;
+import com.sike.constant.RoleConstants;
 import com.sike.entity.user.UserEntity;
 import com.sike.exception.BusinessException;
 import com.sike.exception.ExceptionCodeEnum;
@@ -13,6 +14,7 @@ import com.sike.request.user.RegisterReq;
 import com.sike.request.user.UserPageReq;
 import com.sike.response.PageResult;
 import com.sike.service.user.UserService;
+import com.sike.user.dao.RoleDao;
 import com.sike.user.dao.UserDao;
 import com.sike.utils.KeyGenerator;
 import com.sike.utils.MD5Util;
@@ -28,6 +30,8 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private RoleDao roleDao;
 
     @Override
     public UserEntity login(LoginReq loginReq) {
@@ -65,6 +69,12 @@ public class UserServiceImpl implements UserService {
         int num = userDao.createUser(userEntity);
         if (num == 0) {
             throw new BusinessException(ExceptionCodeEnum.REGISTER_FAIL);
+        }
+        //绑定角色
+        String defaultRoleId = roleDao.findRoleIdByName(RoleConstants.ROLE_NORMAL);
+        num = roleDao.addUserRole(userEntity.getId(), defaultRoleId);
+        if (num == 0) {
+            throw new BusinessException(ExceptionCodeEnum.ROLE_BIND_FAIL);
         }
         return userEntity;
     }

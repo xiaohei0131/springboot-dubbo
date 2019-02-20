@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.sike.constant.RoleConstants.ROLE_ADMIN;
+
 @Component
 public class PermissionAuthHandler implements PermissionAuthService {
     private final static String ADMIN = "admin";
@@ -29,7 +31,7 @@ public class PermissionAuthHandler implements PermissionAuthService {
         }
         List<RolePermissionEntity> permissions = new ArrayList<>();
         for (RoleEntity roleEntity : userEntity.getRoles()) {
-            if (ADMIN.equals(roleEntity.getName())) {
+            if (ROLE_ADMIN.equals(roleEntity.getName())) {
                 return;
             }
             permissions.addAll(roleEntity.getPermissions());

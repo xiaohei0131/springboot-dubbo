@@ -32,7 +32,8 @@ public enum ExceptionCodeEnum implements Serializable {
     EMAIL_USED(UserExpPrefix + "008", "电子邮箱已被注册"),
     PHONE_USED(UserExpPrefix + "009", "手机号已被注册"),
     USERNAME_USED(UserExpPrefix + "010", "用户名已被注册"),
-    REGISTER_FAIL(UserExpPrefix + "011", "注册失败");
+    ROLE_BIND_FAIL(UserExpPrefix + "011", "角色分配失败"),
+    REGISTER_FAIL(UserExpPrefix + "012", "注册失败");
 
 
     private String code;

@@ -1,6 +1,8 @@
 package com.sike.entity.user;
 
-public class RolePermissionEntity {
+import com.sike.bean.BaseBean;
+
+public class RolePermissionEntity extends BaseBean {
     private int id;
     private String roleId;
     private String permission;

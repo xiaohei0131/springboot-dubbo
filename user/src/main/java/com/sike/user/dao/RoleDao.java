@@ -16,4 +16,10 @@ public interface RoleDao {
 
     @Select("select permission,application from sys_role_permission where role_id=#{roleId}")
     List<RolePermissionEntity> findPermissionsByRoleId(@Param("roleId") String roleId);
+
+    @Select("select id from sys_role where name=#{name}")
+    String findRoleIdByName(@Param("name") String name);
+
+    @Insert("insert into sys_user_role (user_id,role_id) values(#{userId},#{roleId})")
+    int addUserRole(@Param("userId") String userId,@Param("roleId") String roleId);
 }
