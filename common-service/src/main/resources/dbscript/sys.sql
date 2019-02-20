@@ -71,3 +71,20 @@ CREATE TABLE `sys_user_role` (
 -- Records of sys_user_role
 -- ----------------------------
 INSERT INTO `sys_user_role` VALUES ('1', 'f1347d3259e941238517cd84ea2ed6b6', 'e57d0e8e7d9c497c8909d03436fb69d0');
+
+-- ----------------------------
+-- Table structure for sys_role_permission
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_role_permission`;
+CREATE TABLE `sys_role_permission` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `role_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '角色id',
+  `permission` varchar(100) NOT NULL COMMENT '权限代码（接口预定义好）',
+  `application` varchar(100) NOT NULL COMMENT '权限所属应用名',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='角色权限表';
+
+-- ----------------------------
+-- Records of sys_role_permission
+-- ----------------------------
+INSERT INTO `sys_role_permission` VALUES ('1', '8d0b8d7ee5b44d479423d9cf2f09da5b', 'user.list', 'controller');
