@@ -13,7 +13,7 @@ public class PermissionProperties {
     /**
      * 使用redis上报权限，redis配置基于springboot
      **/
-    private String server = Constants.SERVER_REDIS;
+    private String server;
 
     /**
      * 扫描路径，多个用英文分号隔开

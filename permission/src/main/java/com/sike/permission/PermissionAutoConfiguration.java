@@ -3,26 +3,23 @@ package com.sike.permission;
 import com.alibaba.fastjson.JSONObject;
 import com.sike.permission.annotation.EnablePermissionConfiguration;
 import com.sike.permission.annotation.Permission;
+import com.sike.permission.bean.Constants;
 import com.sike.permission.bean.PermissionBean;
 import com.sike.permission.tools.PermissionTool;
 import org.springframework.beans.BeanInstantiationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.http.MediaType;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.mvc.condition.NameValueExpression;
-import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
-import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -68,64 +65,63 @@ public class PermissionAutoConfiguration implements CommandLineRunner {
         getPermissions(packages);
     }
 
-    private void getPermissions(String[] packages) {
+    private void getPermissions(String[] packages) throws ClassNotFoundException {
         if (packages == null || packages.length == 0) {
             return;
         }
-
-        String key = redisPermissionKey();
-        //删除缓存
-        redisTemplate.delete(key);
-
-        RequestMappingHandlerMapping mapping = applicationContext.getBean(RequestMappingHandlerMapping.class);
-        // 取得对应Annotation映射，BeanName -- 实例
-        RequestMappingInfo requestMappingInfo;
-        Method method;
-        Map<RequestMappingInfo, HandlerMethod> map = mapping.getHandlerMethods();
+        DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
+        ClassPathBeanDefinitionScanner scanner = new ClassPathBeanDefinitionScanner(beanFactory);
         List<PermissionBean> permissionBeanList = new ArrayList<>();
-        for (Map.Entry<RequestMappingInfo, HandlerMethod> m : map.entrySet()) {
-            requestMappingInfo = m.getKey();
-            method = m.getValue().getMethod();
-            if (subPackage(method.getDeclaringClass().getPackage().getName(),packages)) {
-                PermissionBean permissionBean = getPermission(requestMappingInfo, method);
-                if (permissionBean != null) {
-                    redisTemplate.opsForHash().put(key,permissionBean.getCode(),JSONObject.toJSONString(permissionBean));
-                    permissionBeanList.add(permissionBean);
+        List<String> permissionList = new ArrayList<>();
+        for (String packageName : packages) {
+            Set<BeanDefinition> candidateComponents = scanner.findCandidateComponents(packageName.trim());
+            if (CollectionUtils.isEmpty(candidateComponents)) {
+                continue;
+            }
+            for (BeanDefinition beanDefinition : candidateComponents) {
+                Class<?> serviceBean = Class.forName(beanDefinition.getBeanClassName());
+                Method[] methods = serviceBean.getMethods();
+                PermissionBean permissionBean;
+                for (Method method : methods) {
+                    permissionBean = getPermission(method);
+                    if (permissionBean != null) {
+                        permissionBeanList.add(permissionBean);
+                        permissionList.add(JSONObject.toJSONString(permissionBean));
+                    }
                 }
             }
         }
 
-       if(!CollectionUtils.isEmpty(permissionBeanList)){
-            PermissionTool.setPermissionBeans(permissionBeanList);
+        if (CollectionUtils.isEmpty(permissionBeanList) || CollectionUtils.isEmpty(permissionList)) {
+            return;
+        }
+        PermissionTool.setPermissionBeans(permissionBeanList);
+        if (StringUtils.isEmpty(properties.getServer())) {
+            return;
+        }
+        if (Constants.SERVER_REDIS.equals(properties.getServer())) {
+            String key = redisPermissionKey();
+            //删除缓存
+            redisTemplate.delete(key);
+            redisTemplate.opsForSet().add(key, permissionList.toArray(new String[permissionList.size()]));
         }
     }
 
     /**
      * 当前application权限集存入redis的key
+     *
      * @return
      */
-    private String redisPermissionKey(){
+    private String redisPermissionKey() {
         StringBuilder key = new StringBuilder();
         key.append("permission:");
         key.append(properties.getApplication().getName());
-        key.append(":");
-        key.append(properties.getApplication().getVersion());
+        /*key.append(":");
+        key.append(properties.getApplication().getVersion());*/
         return key.toString();
     }
 
-    private boolean subPackage(String pgName,String[] packages){
-        if(StringUtils.isEmpty(pgName)){
-            return false;
-        }
-        for(int i = 0;i<packages.length;i++){
-            if(pgName.startsWith(packages[i])){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private PermissionBean getPermission(RequestMappingInfo requestMappingInfo, Method method) {
+    private PermissionBean getPermission(Method method) {
         PermissionBean permissionBean = new PermissionBean();
         permissionBean.setApplicationName(properties.getApplication().getName());
         Permission permission = AnnotationUtils.findAnnotation(method, Permission.class);
@@ -142,44 +138,6 @@ public class PermissionAutoConfiguration implements CommandLineRunner {
         }
         permissionNameSet.add(permission.name());
         permissionBean.setName(permission.name());
-        PatternsRequestCondition patternsRequestCondition = requestMappingInfo.getPatternsCondition();
-
-        List<String> urls = new ArrayList<>();
-        for (String url : patternsRequestCondition.getPatterns()) {
-            urls.add(url);
-        }
-        permissionBean.setUrls(urls);
-        List<String> methods = new ArrayList<>();
-        for (RequestMethod requestMethod : requestMappingInfo.getMethodsCondition().getMethods()) {
-            methods.add(requestMethod.toString());
-        }
-        permissionBean.setMethods(methods);
-
-        List<String> consumers = new ArrayList<>();
-        for (MediaType mediaType : requestMappingInfo.getConsumesCondition().getConsumableMediaTypes()) {
-            consumers.add(mediaType.toString());
-        }
-        permissionBean.setConsumers(consumers);
-
-        List<String> produces = new ArrayList<>();
-        for (MediaType mediaType : requestMappingInfo.getProducesCondition().getProducibleMediaTypes()) {
-            produces.add(mediaType.toString());
-        }
-        permissionBean.setProduces(produces);
-
-
-        List<String> headers = new ArrayList<>();
-        for (NameValueExpression<String> nve : requestMappingInfo.getHeadersCondition().getExpressions()) {
-            headers.add(nve.toString());
-        }
-        permissionBean.setHeaders(headers);
-
-        List<String> params = new ArrayList<>();
-        for (NameValueExpression<String> nve : requestMappingInfo.getParamsCondition().getExpressions()) {
-            params.add(nve.toString());
-        }
-        permissionBean.setParams(params);
-
         return permissionBean;
     }
 }
