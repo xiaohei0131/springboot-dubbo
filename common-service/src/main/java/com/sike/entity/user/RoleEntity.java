@@ -2,6 +2,8 @@ package com.sike.entity.user;
 
 import com.sike.bean.BaseBean;
 
+import java.util.List;
+
 public class RoleEntity extends BaseBean {
     /**
      * 主键
@@ -17,6 +19,11 @@ public class RoleEntity extends BaseBean {
      * 角色描述
      */
     private String description;
+
+    /**
+     * 权限
+     */
+    private List<RolePermissionEntity> permissions;
 
     public String getId() {
         return id;
@@ -40,5 +47,13 @@ public class RoleEntity extends BaseBean {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<RolePermissionEntity> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(List<RolePermissionEntity> permissions) {
+        this.permissions = permissions;
     }
 }

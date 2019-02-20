@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.sike.permission.annotation.EnablePermissionConfiguration;
 import com.sike.permission.annotation.Permission;
 import com.sike.permission.bean.PermissionBean;
+import com.sike.permission.tools.PermissionTool;
 import org.springframework.beans.BeanInstantiationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -71,42 +72,45 @@ public class PermissionAutoConfiguration implements CommandLineRunner {
         if (packages == null || packages.length == 0) {
             return;
         }
-        StringBuilder key = new StringBuilder();
-        key.append("permission:");
-        key.append(properties.getApplication().getName());
-        key.append(":");
-        key.append(properties.getApplication().getVersion());
+
+        String key = redisPermissionKey();
         //删除缓存
-        redisTemplate.delete(key.toString());
+        redisTemplate.delete(key);
 
         RequestMappingHandlerMapping mapping = applicationContext.getBean(RequestMappingHandlerMapping.class);
         // 取得对应Annotation映射，BeanName -- 实例
         RequestMappingInfo requestMappingInfo;
         Method method;
         Map<RequestMappingInfo, HandlerMethod> map = mapping.getHandlerMethods();
-        List<String> permissionBeanList = new ArrayList<>();
+        List<PermissionBean> permissionBeanList = new ArrayList<>();
         for (Map.Entry<RequestMappingInfo, HandlerMethod> m : map.entrySet()) {
             requestMappingInfo = m.getKey();
             method = m.getValue().getMethod();
             if (subPackage(method.getDeclaringClass().getPackage().getName(),packages)) {
                 PermissionBean permissionBean = getPermission(requestMappingInfo, method);
                 if (permissionBean != null) {
-                    redisTemplate.opsForHash().put(key.toString(),permissionBean.getCode(),JSONObject.toJSONString(permissionBean));
-//                    permissionBeanList.add(JSONObject.toJSONString(permissionBean));
+                    redisTemplate.opsForHash().put(key,permissionBean.getCode(),JSONObject.toJSONString(permissionBean));
+                    permissionBeanList.add(permissionBean);
                 }
             }
         }
 
-       /* if(CollectionUtils.isEmpty(permissionBeanList)){
-            return;
+       if(!CollectionUtils.isEmpty(permissionBeanList)){
+            PermissionTool.setPermissionBeans(permissionBeanList);
         }
+    }
+
+    /**
+     * 当前application权限集存入redis的key
+     * @return
+     */
+    private String redisPermissionKey(){
         StringBuilder key = new StringBuilder();
         key.append("permission:");
         key.append(properties.getApplication().getName());
         key.append(":");
         key.append(properties.getApplication().getVersion());
-        redisTemplate.delete(key.toString());
-        redisTemplate.opsForSet().add(key.toString(), permissionBeanList.toArray(new String[permissionBeanList.size()]));*/
+        return key.toString();
     }
 
     private boolean subPackage(String pgName,String[] packages){
@@ -123,6 +127,7 @@ public class PermissionAutoConfiguration implements CommandLineRunner {
 
     private PermissionBean getPermission(RequestMappingInfo requestMappingInfo, Method method) {
         PermissionBean permissionBean = new PermissionBean();
+        permissionBean.setApplicationName(properties.getApplication().getName());
         Permission permission = AnnotationUtils.findAnnotation(method, Permission.class);
         if (permission == null) {
             return null;

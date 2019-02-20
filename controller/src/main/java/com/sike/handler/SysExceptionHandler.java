@@ -1,4 +1,4 @@
-package com.sike.handle;
+package com.sike.handler;
 
 import com.sike.exception.BusinessException;
 import com.sike.exception.ExceptionCodeEnum;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @ControllerAdvice
 @ResponseBody
-public class ExceptionHandle {
+public class SysExceptionHandler {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 

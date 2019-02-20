@@ -34,6 +34,7 @@ public class UserController {
     public static Map<String, UserEntity> userMap = new HashMap<>();
 
     @GetMapping("/list")
+    @Permission(code = "user.list",name = "分页查询用户")
     public PageResult getUserList(UserPageReq userPageReq) {
         return userService.queryUsers(userPageReq);
     }

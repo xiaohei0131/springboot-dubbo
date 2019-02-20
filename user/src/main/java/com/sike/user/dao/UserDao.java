@@ -17,12 +17,9 @@ public interface UserDao {
             @Result(column = "nick_name", property = "nickName"),
             @Result(column = "register_time", property = "registerTime"),
             @Result(column = "user_state", property = "userState"),
-            @Result(column = "id", property = "roles", many = @Many(select = "com.sike.user.dao.UserDao.findRolesByUserId"))
+            @Result(column = "id", property = "roles", many = @Many(select = "com.sike.user.dao.RoleDao.findRolesByUserId"))
     })
     List<UserEntity> findUsers(@Param("userPageReq") UserPageReq userPageReq);
-
-    @Select("select sr.*  from sys_role sr join sys_user_role sur on sr.id=sur.role_id where sur.user_id=#{userId}")
-    List<RoleEntity> findRolesByUserId(@Param("userId") String userId);
 
     @Select("select id,username,nick_name,password,salt,portrait,phone,email,register_time,user_state from sys_user where username=#{userQuery.username} or phone=#{userQuery.phone} or email=#{userQuery.email}")
     @Results({
@@ -31,7 +28,7 @@ public interface UserDao {
             @Result(column = "nick_name", property = "nickName"),
             @Result(column = "register_time", property = "registerTime"),
             @Result(column = "user_state", property = "userState"),
-            @Result(column = "id", property = "roles", many = @Many(select = "com.sike.user.dao.UserDao.findRolesByUserId"))
+            @Result(column = "id", property = "roles", many = @Many(select = "com.sike.user.dao.RoleDao.findRolesByUserId"))
     })
     UserEntity loginCheck(@Param("userQuery") UserQuery userQuery);
 

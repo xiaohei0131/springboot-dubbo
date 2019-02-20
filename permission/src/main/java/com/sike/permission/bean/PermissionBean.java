@@ -3,6 +3,7 @@ package com.sike.permission.bean;
 import java.util.List;
 
 public class PermissionBean {
+    private String applicationName;
     private String code;
     private String name;
     private List<String> urls;
@@ -11,6 +12,14 @@ public class PermissionBean {
     private List<String> produces;
     private List<String> headers;
     private List<String> params;
+
+    public String getApplicationName() {
+        return applicationName;
+    }
+
+    public void setApplicationName(String applicationName) {
+        this.applicationName = applicationName;
+    }
 
     public String getCode() {
         return code;
