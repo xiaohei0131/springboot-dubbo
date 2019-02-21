@@ -1,0 +1,59 @@
+{
+  "groups": [
+    {
+      "sourceType": "com.sike.permission.PermissionProperties",
+      "name": "sike.permission",
+      "description": "Permission configuration"
+    }
+  ],
+  "properties": [
+    {
+      "sourceType": "com.sike.permission.PermissionProperties",
+      "name": "sike.permission.server",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.sike.permission.PermissionProperties",
+      "name": "sike.permission.scan",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.sike.permission.bean.ApplicationProperties",
+      "name": "sike.permission.application.name",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.sike.permission.bean.ApplicationProperties",
+      "name": "sike.permission.application.version",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.sike.permission.bean.ApiProperties",
+      "name": "sike.permission.api.address",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.sike.permission.bean.ApiProperties",
+      "name": "sike.permission.api.method",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.sike.permission.bean.ApiProperties",
+      "name": "sike.permission.api.params",
+      "type": "java.util.Map<java.lang.String,java.lang.String>"
+    }
+  ],
+  "hints": [
+    {
+      "name": "sike.permission.server",
+      "values": [
+        {
+          "value": "redis"
+        },
+        {
+          "value": "api"
+        }
+      ]
+    }
+  ]
+}

@@ -2,7 +2,6 @@ package com.sike.permission;
 
 import com.sike.permission.bean.ApiProperties;
 import com.sike.permission.bean.ApplicationProperties;
-import com.sike.permission.bean.Constants;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(
