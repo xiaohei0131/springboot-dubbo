@@ -47,6 +47,7 @@ CREATE TABLE `sys_user` (
   `phone` varchar(15) DEFAULT NULL COMMENT '手机号',
   `email` varchar(100) DEFAULT NULL COMMENT '邮箱',
   `register_time` timestamp NULL DEFAULT NULL COMMENT '注册时间',
+  `modify_time`  timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP ,
   `user_state` smallint(1) NOT NULL DEFAULT '0' COMMENT '用户状态（1：启用，0：禁用）',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户表';
@@ -54,7 +55,7 @@ CREATE TABLE `sys_user` (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES ('f1347d3259e941238517cd84ea2ed6b6', 'admin', '系统管理员', null, '3af6b3c37616d89a5eda9588f52a6997', 'a43c7fc10bf54216a2f2ee1e0937d09a', null, null, null, '1');
+INSERT INTO `sys_user` VALUES ('f1347d3259e941238517cd84ea2ed6b6', 'admin', '系统管理员', null, '3af6b3c37616d89a5eda9588f52a6997', 'a43c7fc10bf54216a2f2ee1e0937d09a', null, null, null, null, '1');
 
 -- ----------------------------
 -- Table structure for sys_user_role

@@ -8,7 +8,7 @@ public class UserDaoProvider {
 
     public String findUsers(@Param("userPageReq") UserPageReq userPageReq) {
         StringBuilder sqlBuilder = new StringBuilder();
-        sqlBuilder.append("select id,username,nick_name,portrait,phone,email,register_time,user_state from sys_user ");
+        sqlBuilder.append("select id,username,nick_name,portrait,phone,email,register_time,modify_time,user_state from sys_user ");
         sqlBuilder.append("where 1=1 ");
         if (userPageReq != null) {
             if (StringUtils.isNotEmpty(userPageReq.getUsername())) {

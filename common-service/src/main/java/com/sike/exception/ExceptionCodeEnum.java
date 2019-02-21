@@ -18,7 +18,8 @@ public enum ExceptionCodeEnum implements Serializable {
     ERROR_404(ComExpPrefix + "001", "没有该接口"),
     PARAM_NULL(ComExpPrefix + "002", "参数为空"),
     NO_REPEAT(ComExpPrefix + "003", "请勿重复提交"),
-    SESSION_NO_STORE(ComExpPrefix + "004", "session存储失败"),
+    MISSION_LOGIN(ComExpPrefix + "004", "会话已失效"),
+    SESSION_NO_STORE(ComExpPrefix + "005", "session存储失败"),
 
     /** User模块异常 */
     USERNAME_NULL(UserExpPrefix + "000", "用户名为空"),
@@ -33,7 +34,11 @@ public enum ExceptionCodeEnum implements Serializable {
     PHONE_USED(UserExpPrefix + "009", "手机号已被注册"),
     USERNAME_USED(UserExpPrefix + "010", "用户名已被注册"),
     ROLE_BIND_FAIL(UserExpPrefix + "011", "角色分配失败"),
-    REGISTER_FAIL(UserExpPrefix + "012", "注册失败");
+    REGISTER_FAIL(UserExpPrefix + "012", "注册失败"),
+    ENABLE_FAIL(UserExpPrefix + "013", "启用失败"),
+    DISABLE_FAIL(UserExpPrefix + "014", "禁用失败"),
+    OLD_PWD_ERROR(UserExpPrefix + "015", "旧密码错误"),
+    MODIFY_FAIL(UserExpPrefix + "016", "修改失败");
 
 
     private String code;

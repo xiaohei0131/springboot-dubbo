@@ -7,9 +7,11 @@ import com.github.pagehelper.PageInfo;
 import com.sike.bean.user.UserQuery;
 import com.sike.constant.RoleConstants;
 import com.sike.entity.user.UserEntity;
+import com.sike.enumeration.user.UserStateEnum;
 import com.sike.exception.BusinessException;
 import com.sike.exception.ExceptionCodeEnum;
 import com.sike.request.user.LoginReq;
+import com.sike.request.user.ModifyInfoReq;
 import com.sike.request.user.RegisterReq;
 import com.sike.request.user.UserPageReq;
 import com.sike.response.PageResult;
@@ -39,13 +41,13 @@ public class UserServiceImpl implements UserService {
         userQuery.setEmail(loginReq.getEmail());
         userQuery.setUsername(loginReq.getUsername());
         userQuery.setPhone(loginReq.getPhone());
-        UserEntity userEntity = userDao.loginCheck(userQuery);
+        UserEntity userEntity = userDao.queyUser(userQuery);
         if (userEntity != null && loginReq.getPassword() != null
                 && userEntity.getPassword().equals(MD5Util.entrypt(userEntity.getUsername(), loginReq.getPassword(), userEntity.getSalt()))) {
             /** 登录成功，清除敏感数据 **/
             userEntity.setPassword("");
             userEntity.setSalt("");
-            if (userEntity.getUserState() == 0) {
+            if (userEntity.getUserState() == UserStateEnum.OFF.getCode()) {
                 throw new BusinessException(ExceptionCodeEnum.ACCOUNT_FORBIDDEN);
             }
         } else {
@@ -63,7 +65,7 @@ public class UserServiceImpl implements UserService {
         userEntity.setEmail(registerReq.getEmail());
         userEntity.setPhone(registerReq.getPhone());
         userEntity.setNickName(registerReq.getNickName());
-        userEntity.setUserState(1);
+        userEntity.setUserState(UserStateEnum.ON.getCode());
         userEntity.setSalt(KeyGenerator.getKey());
         userEntity.setPassword(MD5Util.entrypt(registerReq.getUsername(), registerReq.getPassword(), userEntity.getSalt()));
         int num = userDao.createUser(userEntity);
@@ -102,7 +104,7 @@ public class UserServiceImpl implements UserService {
         userQuery.setEmail(registerReq.getEmail());
         userQuery.setUsername(registerReq.getUsername());
         userQuery.setPhone(registerReq.getPhone());
-        UserEntity userEntity = userDao.loginCheck(userQuery);
+        UserEntity userEntity = userDao.queyUser(userQuery);
         if (userEntity != null) {
             if (registerReq.getUsername().equals(userEntity.getUsername())) {
                 throw new BusinessException(ExceptionCodeEnum.USERNAME_USED);
@@ -126,5 +128,57 @@ public class UserServiceImpl implements UserService {
         pageResult.setData(pageInfo.getList());
         pageResult.setTotal(pageInfo.getTotal());
         return pageResult;
+    }
+
+    @Override
+    public void enableUser(String userId) {
+        int upNum = userDao.updateUserState(userId,UserStateEnum.ON.getCode());
+        if(upNum == 0){
+            throw new BusinessException(ExceptionCodeEnum.ENABLE_FAIL);
+        }
+    }
+
+    @Override
+    public void disableUser(String userId) {
+        int upNum = userDao.updateUserState(userId,UserStateEnum.OFF.getCode());
+        if(upNum == 0){
+            throw new BusinessException(ExceptionCodeEnum.DISABLE_FAIL);
+        }
+    }
+
+    @Override
+    public void modifyPwd(String userId, String oldPassword, String newPassword) {
+        if (StringUtils.isEmpty(newPassword)) {
+            throw new BusinessException(ExceptionCodeEnum.PASSWD_NULL);
+        }
+        UserEntity user = userDao.queryUserById(userId);
+        if (user == null){
+            throw new BusinessException(ExceptionCodeEnum.MODIFY_FAIL);
+        }
+        if(user.getUserState() == UserStateEnum.OFF.getCode()){
+            throw new BusinessException(ExceptionCodeEnum.ACCOUNT_FORBIDDEN);
+        }
+        if (!user.getPassword().equals(MD5Util.entrypt(user.getUsername(), oldPassword, user.getSalt()))) {
+            throw new BusinessException(ExceptionCodeEnum.OLD_PWD_ERROR);
+        }
+        int upNum = userDao.updatePwd(userId,MD5Util.entrypt(user.getUsername(), newPassword, user.getSalt()));
+        if(upNum == 0){
+            throw new BusinessException(ExceptionCodeEnum.MODIFY_FAIL);
+        }
+    }
+
+    @Override
+    public void modifyUser(ModifyInfoReq modifyInfoReq) {
+        if (StringUtils.isEmpty(modifyInfoReq.getEmail())) {
+            throw new BusinessException(ExceptionCodeEnum.EMAIL_NULL);
+        }
+        if (StringUtils.isEmpty(modifyInfoReq.getPhone())) {
+            throw new BusinessException(ExceptionCodeEnum.PHONE_NULL);
+        }
+
+        int upNum = userDao.updateUserInfo(modifyInfoReq);
+        if(upNum == 0){
+            throw new BusinessException(ExceptionCodeEnum.MODIFY_FAIL);
+        }
     }
 }
