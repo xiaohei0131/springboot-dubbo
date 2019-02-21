@@ -6,9 +6,9 @@
 -----
 
 ## permission模块提供权限搜集及拦截作用
-> 其他controller模块依赖permission，启动类增加注解@EnablePermissionConfiguration，然后使用@Permission(code = "{权限代码}",name = "{权限名称}")，配合@RequestMapping注解使用
-> 权限permission配置
->   若要实现权限校验功能，请实现接口 com.sike.permission.PermissionAuthService中authentication方法，
+> 其他controller模块依赖permission，启动类增加注解@EnablePermissionConfiguration，然后使用@Permission(code = "{权限代码}",name = "{权限名称}")，配合@RequestMapping注解使用。
+
+> 权限permission配置，若要实现权限校验功能，请实现接口 com.sike.permission.PermissionAuthService中authentication方法，
 >   authentication方法参数有*
 >       @param request HttpServletRequest对象
 >       @param args 目标方法参数
