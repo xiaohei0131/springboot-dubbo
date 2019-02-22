@@ -1,0 +1,567 @@
+{
+	"info": {
+		"_postman_id": "1928ea50-a996-4088-aef4-06b4e0417165",
+		"name": "dubbo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "有权限",
+			"item": [
+				{
+					"name": "管理员",
+					"item": [
+						{
+							"name": "修改用户信息",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/x-www-form-urlencoded",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "nickName",
+											"value": "阿三",
+											"type": "text"
+										},
+										{
+											"key": "portrait",
+											"value": "image",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "13782736362",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "3@c.cc",
+											"type": "text"
+										},
+										{
+											"key": "userId",
+											"value": "525a191221654ac8ada7b60da1b1bcba",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{context}}/user/modifyUserInfo",
+									"host": [
+										"{{context}}"
+									],
+									"path": [
+										"user",
+										"modifyUserInfo"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "启用账号",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/x-www-form-urlencoded"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "userId",
+											"value": "525a191221654ac8ada7b60da1b1bcba",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{context}}/user/enable",
+									"host": [
+										"{{context}}"
+									],
+									"path": [
+										"user",
+										"enable"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "禁用账号",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/x-www-form-urlencoded"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "userId",
+											"value": "525a191221654ac8ada7b60da1b1bcba",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{context}}/user/disable",
+									"host": [
+										"{{context}}"
+									],
+									"path": [
+										"user",
+										"disable"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "角色列表查询",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/x-www-form-urlencoded",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "pageNum",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "pageSize",
+											"value": "20",
+											"type": "text"
+										},
+										{
+											"key": "roleName",
+											"value": "r",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{context}}/role/list",
+									"host": [
+										"{{context}}"
+									],
+									"path": [
+										"role",
+										"list"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "新增角色",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/x-www-form-urlencoded",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "roleName",
+											"value": "testRole",
+											"type": "text"
+										},
+										{
+											"key": "roleDesc",
+											"value": "测试角色",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{context}}/role/add",
+									"host": [
+										"{{context}}"
+									],
+									"path": [
+										"role",
+										"add"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "角色分配权限",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{context}}/role/permission/bind",
+									"host": [
+										"{{context}}"
+									],
+									"path": [
+										"role",
+										"permission",
+										"bind"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "删除角色",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{context}}/role/delete",
+									"host": [
+										"{{context}}"
+									],
+									"path": [
+										"role",
+										"delete"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "管理员登录",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "admin123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{context}}/user/login",
+							"host": [
+								"{{context}}"
+							],
+							"path": [
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "普通用户登录",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "zhangsan",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "123456",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{context}}/user/login",
+							"host": [
+								"{{context}}"
+							],
+							"path": [
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "退出",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{context}}/user/logout",
+							"host": [
+								"{{context}}"
+							],
+							"path": [
+								"user",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "查询用户",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "pageNum",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "pageSize",
+									"value": "20",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "asd",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{context}}/user/list",
+							"host": [
+								"{{context}}"
+							],
+							"path": [
+								"user",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "修改自己的密码",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "oldPassword",
+									"value": "111111",
+									"type": "text"
+								},
+								{
+									"key": "newPassword",
+									"value": "123456",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{context}}/user/modifySelfPwd",
+							"host": [
+								"{{context}}"
+							],
+							"path": [
+								"user",
+								"modifySelfPwd"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "修改自己的信息",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "nickName",
+									"value": "阿三",
+									"type": "text"
+								},
+								{
+									"key": "portrait",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "3",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{context}}/user/modifySelfInfo",
+							"host": [
+								"{{context}}"
+							],
+							"path": [
+								"user",
+								"modifySelfInfo"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "无权限",
+			"item": [
+				{
+					"name": "注册",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "zhangsan",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "123456",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "admin@cc.com",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "13777777777",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{context}}/user/register",
+							"host": [
+								"{{context}}"
+							],
+							"path": [
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
