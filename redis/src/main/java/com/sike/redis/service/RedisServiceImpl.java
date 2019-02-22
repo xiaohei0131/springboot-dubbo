@@ -81,7 +81,7 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
-    public Long leftPush(String key, Collection value) {
-        return redisTemplate.opsForList().leftPushAll(key,value);
+    public void expireKey(String key, Long expireTime) {
+        redisTemplate.expire(key, expireTime, TimeUnit.SECONDS);
     }
 }

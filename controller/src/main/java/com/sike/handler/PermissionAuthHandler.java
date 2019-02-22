@@ -19,7 +19,6 @@ import static com.sike.constant.RoleConstants.ROLE_ADMIN;
 
 @Component
 public class PermissionAuthHandler implements PermissionAuthService {
-    private final static String ADMIN = "admin";
     @Autowired
     SessionUtil sessionUtil;
 

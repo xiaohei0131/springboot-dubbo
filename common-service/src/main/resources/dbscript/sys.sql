@@ -83,10 +83,12 @@ CREATE TABLE `sys_role_permission` (
   `permission` varchar(100) NOT NULL COMMENT '权限代码（接口预定义好）',
   `application` varchar(100) NOT NULL COMMENT '权限所属应用名',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='角色权限表';
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='角色权限表';
 
 -- ----------------------------
 -- Records of sys_role_permission
 -- ----------------------------
 INSERT INTO `sys_role_permission` VALUES ('1', '8d0b8d7ee5b44d479423d9cf2f09da5b', 'user.list', 'controller');
 INSERT INTO `sys_role_permission` VALUES ('2', '8d0b8d7ee5b44d479423d9cf2f09da5b', 'user.logout', 'controller');
+INSERT INTO `sys_role_permission` VALUES ('3', '8d0b8d7ee5b44d479423d9cf2f09da5b', 'user.self.modifyPwd', 'controller');
+INSERT INTO `sys_role_permission` VALUES ('4', '8d0b8d7ee5b44d479423d9cf2f09da5b', 'user.self.modifyInfo', 'controller');

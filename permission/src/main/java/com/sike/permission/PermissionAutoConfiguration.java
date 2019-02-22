@@ -129,12 +129,12 @@ public class PermissionAutoConfiguration implements CommandLineRunner {
             return null;
         }
         if (permissionCodeSet.contains(permission.code())) {
-            throw new BeanInstantiationException(method.getClass(), "Duplicate permission code [" + permission.code() + "]");
+            throw new BeanInstantiationException(method.getDeclaringClass(), "Duplicate permission code [" + permission.code() + "]");
         }
         permissionCodeSet.add(permission.code());
         permissionBean.setCode(permission.code());
         if (permissionNameSet.contains(permission.name())) {
-            throw new BeanInstantiationException(method.getClass(), "Duplicate permission name [" + permission.name() + "]");
+            throw new BeanInstantiationException(method.getDeclaringClass(), "Duplicate permission name [" + permission.name() + "]");
         }
         permissionNameSet.add(permission.name());
         permissionBean.setName(permission.name());

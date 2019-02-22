@@ -37,6 +37,7 @@ public class UserDaoProvider {
                 sqlBuilder.append("'");
             }
         }
+        sqlBuilder.append(" order by register_time desc");
         return sqlBuilder.toString();
     }
 }

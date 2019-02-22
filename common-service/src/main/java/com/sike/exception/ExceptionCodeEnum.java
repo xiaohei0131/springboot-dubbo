@@ -20,6 +20,7 @@ public enum ExceptionCodeEnum implements Serializable {
     NO_REPEAT(ComExpPrefix + "003", "请勿重复提交"),
     MISSION_LOGIN(ComExpPrefix + "004", "会话已失效"),
     SESSION_NO_STORE(ComExpPrefix + "005", "session存储失败"),
+    OPERATION_FAIL(ComExpPrefix + "006", "操作失败"),
 
     /** User模块异常 */
     USERNAME_NULL(UserExpPrefix + "000", "用户名为空"),

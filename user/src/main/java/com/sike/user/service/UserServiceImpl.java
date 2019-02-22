@@ -3,7 +3,6 @@ package com.sike.user.service;
 import com.alibaba.dubbo.common.utils.StringUtils;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.sike.bean.user.UserQuery;
 import com.sike.constant.RoleConstants;
 import com.sike.entity.user.UserEntity;
@@ -20,6 +19,8 @@ import com.sike.user.dao.RoleDao;
 import com.sike.user.dao.UserDao;
 import com.sike.utils.KeyGenerator;
 import com.sike.utils.MD5Util;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +31,7 @@ import java.util.List;
 @Component
 @Transactional
 public class UserServiceImpl implements UserService {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private UserDao userDao;
     @Autowired
@@ -123,25 +125,21 @@ public class UserServiceImpl implements UserService {
     public PageResult queryUsers(UserPageReq userPageReq) {
         PageHelper.startPage(userPageReq.getPageNum(), userPageReq.getPageSize());
         List<UserEntity> users = userDao.findUsers(userPageReq);
-        PageInfo<UserEntity> pageInfo = new PageInfo<>(users);
-        PageResult pageResult = new PageResult();
-        pageResult.setData(pageInfo.getList());
-        pageResult.setTotal(pageInfo.getTotal());
-        return pageResult;
+        return PageResult.make(users);
     }
 
     @Override
     public void enableUser(String userId) {
-        int upNum = userDao.updateUserState(userId,UserStateEnum.ON.getCode());
-        if(upNum == 0){
+        int upNum = userDao.updateUserState(userId, UserStateEnum.ON.getCode());
+        if (upNum == 0) {
             throw new BusinessException(ExceptionCodeEnum.ENABLE_FAIL);
         }
     }
 
     @Override
     public void disableUser(String userId) {
-        int upNum = userDao.updateUserState(userId,UserStateEnum.OFF.getCode());
-        if(upNum == 0){
+        int upNum = userDao.updateUserState(userId, UserStateEnum.OFF.getCode());
+        if (upNum == 0) {
             throw new BusinessException(ExceptionCodeEnum.DISABLE_FAIL);
         }
     }
@@ -152,17 +150,17 @@ public class UserServiceImpl implements UserService {
             throw new BusinessException(ExceptionCodeEnum.PASSWD_NULL);
         }
         UserEntity user = userDao.queryUserById(userId);
-        if (user == null){
+        if (user == null) {
             throw new BusinessException(ExceptionCodeEnum.MODIFY_FAIL);
         }
-        if(user.getUserState() == UserStateEnum.OFF.getCode()){
+        if (user.getUserState() == UserStateEnum.OFF.getCode()) {
             throw new BusinessException(ExceptionCodeEnum.ACCOUNT_FORBIDDEN);
         }
         if (!user.getPassword().equals(MD5Util.entrypt(user.getUsername(), oldPassword, user.getSalt()))) {
             throw new BusinessException(ExceptionCodeEnum.OLD_PWD_ERROR);
         }
-        int upNum = userDao.updatePwd(userId,MD5Util.entrypt(user.getUsername(), newPassword, user.getSalt()));
-        if(upNum == 0){
+        int upNum = userDao.updatePwd(userId, MD5Util.entrypt(user.getUsername(), newPassword, user.getSalt()));
+        if (upNum == 0) {
             throw new BusinessException(ExceptionCodeEnum.MODIFY_FAIL);
         }
     }
@@ -177,7 +175,7 @@ public class UserServiceImpl implements UserService {
         }
 
         int upNum = userDao.updateUserInfo(modifyInfoReq);
-        if(upNum == 0){
+        if (upNum == 0) {
             throw new BusinessException(ExceptionCodeEnum.MODIFY_FAIL);
         }
     }

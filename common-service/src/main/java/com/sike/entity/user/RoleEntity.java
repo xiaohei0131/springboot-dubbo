@@ -21,6 +21,11 @@ public class RoleEntity extends BaseBean {
     private String description;
 
     /**
+     * 角色类型
+     */
+    private int roleType;
+
+    /**
      * 权限
      */
     private List<RolePermissionEntity> permissions;
@@ -47,6 +52,14 @@ public class RoleEntity extends BaseBean {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public int getRoleType() {
+        return roleType;
+    }
+
+    public void setRoleType(int roleType) {
+        this.roleType = roleType;
     }
 
     public List<RolePermissionEntity> getPermissions() {

@@ -59,10 +59,9 @@ public interface RedisService {
     boolean set(final String key, Serializable value, Long expireTime);
 
     /**
-     * 添加 LeftPush List（使用默认失效时间）
+     * 设置key的有效时长
      * @param key
-     * @param value
-     * @return
+     * @param expireTime （单位秒）
      */
-    Long leftPush(final String key, Collection value);
+    void expireKey(final String key, Long expireTime);
 }

@@ -73,4 +73,17 @@ public class UserPageReq extends PageReq {
     public void setUserState(Integer userState) {
         this.userState = userState;
     }
+
+    @Override
+    public String toString() {
+        return "UserPageReq{" +
+                "username='" + username + '\'' +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", registerTimeStart='" + registerTimeStart + '\'' +
+                ", registerTimeEnd='" + registerTimeEnd + '\'' +
+                ", userState=" + userState +
+                '}';
+    }
 }

@@ -27,6 +27,7 @@ public class SessionUtil {
 
     /**
      * 获取SessionID
+     *
      * @param request 当前的请求对象
      * @return SessionID的值
      */
@@ -35,7 +36,7 @@ public class SessionUtil {
 
         // 遍历所有cookie
         String sessionId = null;
-        if (cookies!=null && cookies.length>0) {
+        if (cookies != null && cookies.length > 0) {
             for (Cookie cookie : cookies) {
                 if (sessionName.equals(cookie.getName())) {
                     sessionId = cookie.getValue();
@@ -49,28 +50,30 @@ public class SessionUtil {
 
     /**
      * 存储session
+     *
      * @param httpRsp
      * @param userEntity
      * @return
      */
-    public void setSession(HttpServletResponse httpRsp,UserEntity userEntity){
+    public void setSession(HttpServletResponse httpRsp, UserEntity userEntity) {
         String tokenId = KeyGenerator.getKey();
         Cookie cookie = new Cookie(sessionName, tokenId);
         cookie.setPath("/");
         httpRsp.addCookie(cookie);
         //redis存储
         boolean re = redisService.set(tokenId, userEntity, tokenExpire);
-        if(!re){
+        if (!re) {
             throw new BusinessException(ExceptionCodeEnum.SESSION_NO_STORE);
         }
     }
 
     /**
      * 移除session
+     *
      * @param httpServletReq
      * @return
      */
-    public void removeSession(HttpServletRequest httpServletReq){
+    public void removeSession(HttpServletRequest httpServletReq) {
         // sessionId
         String sessionId = getSessionId(httpServletReq);
         if (StringUtils.isEmpty(sessionId)) {
@@ -82,6 +85,7 @@ public class SessionUtil {
 
     /**
      * 获取用户信息
+     *
      * @param httpServletReq HTTP请求
      * @return 用户信息
      */
@@ -97,6 +101,8 @@ public class SessionUtil {
         if (userEntity == null) {
             return null;
         }
+        //更新有效时长
+        redisService.expireKey(sessionId, tokenExpire);
         return (UserEntity) userEntity;
 
     }

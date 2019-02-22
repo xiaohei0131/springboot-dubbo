@@ -1,6 +1,9 @@
 package com.sike.response;
 
+import com.github.pagehelper.PageInfo;
 import com.sike.bean.BaseBean;
+
+import java.util.List;
 
 public class PageResult extends BaseBean {
 
@@ -21,5 +24,13 @@ public class PageResult extends BaseBean {
 
     public void setData(Object data) {
         this.data = data;
+    }
+
+    public static PageResult make(List list){
+        PageInfo pageInfo = new PageInfo<>(list);
+        PageResult pageResult = new PageResult();
+        pageResult.setData(pageInfo.getList());
+        pageResult.setTotal(pageInfo.getTotal());
+        return pageResult;
     }
 }
